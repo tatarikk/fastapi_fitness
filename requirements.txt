@@ -84,7 +84,6 @@ protobuf==3.20.3
 psycopg2-binary==2.9.5
 pycparser==2.21
 pydantic==1.10.4
-pydantic-settings==2.1.0
 pydantic_core==2.16.3
 pyee==11.1.0
 pyflakes==3.0.1
