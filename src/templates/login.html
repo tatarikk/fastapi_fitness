@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фитнес</title>
+    <link rel="stylesheet" href="styles_login.css">
+    <style>
+        /* Общие стили */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Стили для контейнера */
+        .container {
+            width: 100%;
+            max-width: 400px; /* Примерная ширина контейнера */
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Стили для логотипа */
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            max-width: 100%; /* Сделаем логотип адаптивным */
+            height: auto; /* Автоматическая высота */
+            max-height: 100px; /* Максимальная высота для небольшого логотипа */
+        }
+
+        .logo h1 {
+            margin-top: 10px; /* Немного отступим заголовок от логотипа */
+        }
+
+        /* Стили для основного изображения */
+        .main-image {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .main-image img {
+            width: 100%; /* Растягиваем изображение на всю доступную ширину */
+            max-width: 100%; /* Ограничиваем максимальную ширину изображения */
+        }
+
+        /* Стили для блока с предложением */
+        .offer {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Стили для формы входа */
+        .login-form {
+            text-align: left; /* Изменено на left для выравнивания содержимого формы */
+        }
+
+        .login-form label {
+            display: block;
+            margin-bottom: 10px;
+            color: purple; /* цвет текста */
+        }
+
+        .login-form input[type="email"],
+        .login-form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none; /* Убираем границу */
+            border-bottom: 1px solid grey; /* Добавляем линию снизу серого цвета */
+        }
+
+        .login-form input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .login-form .agree {
+            display: flex;
+            align-items: center; /* Выравниваем элементы по вертикали */
+        }
+
+        .login-form .agree-label {
+            color: black; /* черный цвет текста */
+            font-size: 1em;
+        }
+
+        /* Стили для кнопки Войти */
+        .login-btn {
+            display: block;
+            width: 100%; /* Растягиваем кнопку на всю ширину контейнера */
+            max-width: 500px; /* Максимальная ширина кнопки равна ширине картинки */
+            margin: 0 auto; /* Центрируем кнопку */
+            background-color: purple;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        /* Стили для ссылки "Забыли пароль?" */
+        .forgot-password a {
+            text-decoration: none;
+            color: grey; /* Серый цвет текста */
+        }
+
+        /* Стили для кнопки "Зарегистрироваться" */
+        .register-btn {
+            display: inline-block;
+            float: right; /* Правое выравнивание */
+            margin-top: -20px; /* Поднятие кнопки */
+        }
+
+        .register-btn button {
+            border: none; /* Убираем обводку */
+            color: purple; /* Меняем цвет текста */
+            background-color: transparent; /* Устанавливаем прозрачный фон */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo">
+        <img src="logo.jpeg" alt="Логотип компании">
+        <h1>Название</h1>
+    </div>
+    <div class="main-image">
+        <img src="images.jpeg" alt="Главное изображение">
+    </div>
+    <div class="offer">
+        <p>Оффер</p>
+    </div>
+    <form class="login-form" action="/auth/login" method="post">
+        <label for="username">Email</label>
+        <input type="email" id="username" name="username" required>
+        <label for="password">Пароль</label>
+        <input type="password" id="password" name="password" required>
+        <div class="agree">
+            <input type="checkbox" id="agree" name="agree">
+            <label for="agree" class="agree-label">Согласие на обработку персональных данных</label>
+        </div>
+
+        <button type="submit" class="login-btn">Войти</button>
+        <div class="forgot-password">
+            <a href="#">Забыли пароль?</a>
+        </div>
+        <div class="register-btn">
+            <button type="button" onclick="window.location.href='/auth/register'">Зарегистрироваться</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Предположим, что успешная аутентификация происходит после отправки формы.
+    // Замените эту функцию на свою логику успешной аутентификации, если необходимо.
+    function onSuccessAuthentication() {
+        // Перенаправляем пользователя на страницу /operations/getinfo
+        window.location.href = '/operations/getinfo';
+    }
+
+    // Получаем форму
+    var form = document.querySelector('.login-form');
+
+    // Назначаем обработчик события отправки формы
+    form.addEventListener('submit', function(event) {
+        // Отменяем стандартное действие браузера по отправке формы
+        event.preventDefault();
+
+        // Здесь можно выполнить проверку данных формы перед отправкой,
+        // а затем выполнить аутентификацию и в случае успеха вызвать функцию onSuccessAuthentication()
+
+        // Пока просто вызываем onSuccessAuthentication() для демонстрации
+        onSuccessAuthentication();
+    });
+</script>
+</body>
+</html>

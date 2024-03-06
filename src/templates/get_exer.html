@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ваше приложение для тренировок</title>
+    <style>
+        /* Общие стили для всего документа */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Стили для верхней части страницы */
+        header {
+            display: flex;
+            justify-content: space-between; /* Распределение элементов по горизонтали с равным пространством между ними */
+            align-items: center; /* Выравнивание элементов по вертикали */
+            padding: 10px;
+            background-color: #f2f2f2; /* Цвет фона */
+        }
+
+        /* Стили для блока с информацией о пользователе */
+        #user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        #user-info img {
+            width: 30px; /* Ширина изображения */
+            height: 30px; /* Высота изображения */
+            border-radius: 50%; /* Скругление углов (делает изображение круглым) */
+            margin-right: 10px; /* Отступ справа */
+        }
+
+        /* Стили для блока с днями недели */
+        #days {
+            display: flex;
+            justify-content: space-around; /* Распределение элементов по горизонтали с равным пространством между ними */
+            padding: 10px;
+            background-color: #f2f2f2; /* Цвет фона */
+            border: 1px solid #ccc; /* Граница вокруг блока */
+            border-radius: 5px; /* Скругление углов границы */
+        }
+
+        /* Стили для блока с программой тренировок */
+        #program {
+            display: flex;
+            justify-content: space-between; /* Распределение элементов по горизонтали с равным пространством между ними */
+            padding: 10px;
+            background-color: #f2f2f2; /* Цвет фона */
+        }
+
+        /* Общие стили для кнопок начала тренировки, выбора уровня и создания тренировки */
+        #start-workout,
+        #level-buttons,
+        #create-workout {
+            background-color: purple; /* Цвет фона кнопок */
+            color: white; /* Цвет текста кнопок */
+            padding: 10px; /* Внутренний отступ кнопок */
+            text-decoration: none; /* Убирает подчеркивание у ссылок */
+            border-radius: 5px; /* Скругление углов кнопок */
+        }
+
+        /* Стили для блока с упражнениями */
+        #exercises {
+            margin-top: 20px; /* Внешний отступ сверху */
+            display: flex;
+            flex-direction: column; /* Отображение элементов в столбец */
+        }
+
+        /* Стили для каждого отдельного упражнения */
+        .exercise {
+            text-align: left; /* Выравнивание текста по левому краю */
+            margin-bottom: 20px; /* Внешний отступ снизу */
+            margin-left: 20px; /* Внешний отступ слева */
+        }
+
+        /* Стили для изображений упражнений */
+        .exercise img {
+            width: 50px; /* Ширина изображения */
+            height: 50px; /* Высота изображения */
+            border-radius: 5px; /* Скругление углов */
+        }
+
+        /* Стили для логотипа */
+        header img {
+            height: 50px; /* Высота изображения */
+            align-self: center; /* Выравнивание изображения по центру по вертикали */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="user-info">
+            <img src="exercises/avatar.jpg" alt="User Avatar">
+            <span>Имя пользователя</span>
+        </div>
+        <img src="logo.jpeg" alt="Логотип">
+    </header>
+
+    <div id="days">
+        <span>Пн</span>
+        <span>Вт</span>
+        <span>Ср</span>
+        <span>Чт</span>
+        <span>Пт</span>
+        <span>Сб</span>
+        <span>Вс</span>
+    </div>
+
+    <div id="program">
+        <button id="start-workout">Начать тренировку</button>
+        <span>Название программы</span>
+    </div>
+
+    <!-- Ваша часть кода с упражнениями -->
+    <div id="exercises">
+        <ul class="exercise-info">
+            {% for ex in exercise %}
+            <li class="exercise">
+                <a href="/highknees" class="exercise-link">{{ ex.Exercises }}</a>
+                <span><strong>Repetitions:</strong> {{ ex.Repetitions }} | <strong>Timer:</strong> {{ ex.Timer }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- Конец вашей части кода -->
+
+    <a href="/exercises/all_exercises" id="create-workout">Создать свою тренировку</a>
+
+    <!-- JavaScript для перенаправления -->
+    <script>
+        document.getElementById("start-workout").addEventListener("click", function() {
+            window.location.href = "/highknees";
+        });
+    </script>
+</body>
+</html>

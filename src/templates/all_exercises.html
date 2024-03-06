@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Exercises</title>
+    <style>
+        /* Стили для верхней части страницы */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f2f2f2;
+        }
+
+        #user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        #user-info img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Стили для блока с упражнениями */
+        #exercises {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+        /* Стили для каждого отдельного упражнения */
+        .exercise {
+            margin-bottom: 20px;
+        }
+
+        .exercise-link {
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* Стили для формы редактирования */
+        .edit-form {
+            margin-top: 10px;
+        }
+
+        /* Общие стили для кнопки изменения */
+        .edit-button {
+            background-color: purple;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Стили для логотипа */
+        header img {
+            max-height: 50px; /* Максимальная высота изображения */
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div id="user-info">
+        <img src="exercises/avatar.jpg" alt="User Avatar">
+        <span>Имя пользователя</span>
+    </div>
+    <img src="logo.jpeg" alt="Логотип">
+</header>
+
+<h1>All Exercises</h1>
+<div id="exercises">
+    <ul class="exercise-info">
+        {% for index in range(exercise|length) %}
+        {% set ex = exercise[index] %}
+        <li class="exercise">
+            <a href="/highknees?repetitions={{ ex.Repetitions }}&timer={{ ex.Timer }}" class="exercise-link">{{
+                ex.Exercises }}</a>
+            <span><strong>Repetitions:</strong> <span
+                    class="repetitions">{{ ex.Repetitions }}</span> | <strong>Timer:</strong> <span class="timer">{{ ex.Timer }}</span></span>
+            <form id="edit-form-{{ index }}" class="edit-form">
+                <label for="timer-{{ index }}">Новый таймер:</label>
+                <input type="text" id="timer-{{ index }}" name="timer">
+                <label for="repetitions-{{ index }}">Новое количество повторений:</label>
+                <input type="text" id="repetitions-{{ index }}" name="repetitions">
+                <button type="submit" class="edit-button" data-index="{{ index }}">Изменить</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script>
+    document.querySelectorAll('.edit-form').forEach(form => {
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const index = form.querySelector('.edit-button').getAttribute('data-index');
+            const timer = form.querySelector(`#timer-${index}`).value;
+            const repetitions = form.querySelector(`#repetitions-${index}`).value;
+            console.log("repetitions:", repetitions);
+            console.log("timer:", timer);
+
+            const data = {};
+            if (timer) {
+                data.timer = timer;
+            }
+            if (repetitions) {
+                data.repetitions = repetitions;
+            }
+
+            const response = await fetch(`/exercises/all_exercises/${index}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                const timerSpan = form.previousElementSibling.querySelector('.timer');
+                const repetitionsSpan = form.previousElementSibling.querySelector('.repetitions');
+                if (timer) {
+                    timerSpan.textContent = timer;
+                }
+                if (repetitions) {
+                    repetitionsSpan.textContent = repetitions;
+                }
+                alert('Данные об упражнении успешно обновлены!');
+            } else {
+                alert('Произошла ошибка при обновлении данных упражнения.');
+            }
+        });
+    });
+
+</script>
+
+</body>
+</html>

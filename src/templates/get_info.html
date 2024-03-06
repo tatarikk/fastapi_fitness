@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information</title>
+    <style>
+        table {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Information</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Birthday</th>
+            <th>Gender</th>
+            <th>Weight</th>
+            <th>Height</th>
+            <th>Activity</th>
+
+        </tr>
+        {% for user in operations %}
+        <tr>
+            <td>{{ user.Name }}</td>
+            <td>{{ user.Surname }}</td>
+            <td>{{ user.Birthday }}</td>
+            <td>{{ user.Gender }}</td>
+            <td>{{ user.Weight }}</td>
+            <td>{{ user.Height }}</td>
+            <td>{{ user.Activity }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

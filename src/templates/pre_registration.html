@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация завершена</title>
+    <link rel="stylesheet" href="styles_login.css">
+    <style>
+        /* Общие стили */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Стили для контейнера */
+        .container {
+            width: 100%;
+            max-width: 400px; /* Примерная ширина контейнера */
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Увеличиваем тень */
+            border: 2px solid #ccc; /* Увеличиваем размер рамки */
+        }
+
+        /* Стили для заголовка */
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Стили для кнопки "Далее" */
+        .next-btn {
+            display: block;
+            width: 100%;
+            padding: 15px; /* Увеличиваем размер кнопки */
+            background-color: #800080; /* Фиолетовый цвет кнопки */
+            color: #fff;
+            border: 2px solid #800080; /* Фиолетовая рамка */
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background-color: #6a006a; /* Темнее при наведении */
+            border-color: #6a006a; /* Темнее при наведении */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Поздравляю! Вы успешно зарегистрировались!</h1>
+    <p>На вашу почту был отправлен ваш пароль.</p>
+    <p>Перейдем к этапу заполнению профиля.</p>
+    <button class="next-btn" onclick="window.location.href='/operations/addinfo'">Далее</button>
+</div>
+</body>
+</html>
