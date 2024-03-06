@@ -2,9 +2,7 @@ FROM python:3.9
 
 RUN apt-get update && apt-get install -y libgl1-mesa-glx libglib2.0-0
 
-RUN mkdir /fastapi_app
-
-WORKDIR /fastapi_app
+WORKDIR /src
 
 RUN ls
 
