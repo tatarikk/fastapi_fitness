@@ -109,7 +109,7 @@ sniffio==1.3.0
 sortedcontainers==2.4.0
 sounddevice==0.4.6
 sqladmin==0.8.0
-SQLAlchemy==2.0.25
+SQLAlchemy==1.4.41
 sqlalchemy2-stubs==0.0.2a32
 sqlalchemy_database==0.1.0
 sqlmodel==0.0.8
