@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y libgl1-mesa-glx libglib2.0-0
 
 RUN mkdir /fastapi_app
 
-WORKDIR src
+WORKDIR /fastapi_app
 
 RUN ls
 
