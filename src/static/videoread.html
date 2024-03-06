@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Видеопоток с камеры</title>
+   <style>
+    #video-container {
+        position: absolute;
+        bottom: 0;
+        left: 955px;
+        width: 100%; /* Ширина контейнера будет составлять половину ширины экрана */
+        height: 93%; /* Высота контейнера будет составлять половину высоты экрана */
+        overflow: hidden ; /* Обрезаем видео, если оно выходит за пределы контейнера */
+    }
+
+    #video {
+        width: 65%; /* Ширина видео будет равна ширине контейнера */
+        height: 100%; /* Высота видео будет равна высоте контейнера */
+        object-fit: cover;
+    }
+
+    #header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #452c63;
+        color: #fff;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between; /* Размещаем элементы в шапке по краям */
+        align-items: center; /* Выравниваем элементы по вертикали */
+    }
+
+    #header .buttons {
+        display: flex;
+        margin-right: 50px;
+    }
+
+    body {
+        margin: 0; /* Убираем отступы у body */
+        overflow: hidden; /* Предотвращает прокрутку страницы */
+        position: relative; /* Позволяет элементам видеть размеры body */
+        height: 100vh; /* Заполняем высоту всего экрана */
+    }
+</style>
+
+
+
+</head>
+<body>
+<div id="header">
+    <div class="info">
+        <div>Количество повторений: <span id="repetitionsCount">0</span></div>
+        <div>Таймер: <span id="timer">0:00</span></div>
+    </div>
+    <div class="buttons">
+        <button id="voiceButton">Включить музыку</button>
+        <button id="downloadButton">Скачать видео</button> <!-- Добавленная кнопка -->
+    </div>
+</div>
+<div id="video-container">
+    <video width="600" loop autoplay>
+    <source src="/static/highknees.mov" type="video/mp4">
+</video>
+</div>
+<video id="video" playsinline autoplay></video>
+<img id="receivedImg" src="" alt="Received Image" style="display:block; width:100%; max-width: 640px;">
+<div id="repetitionsCount">0</div> <!-- Этот элемент будет отображать количество повторений -->
+<div id="timer">0:00</div> <!-- Этот элемент будет отображать таймер -->
+<audio id="audio" src="/static/track.mp3" preload="auto" type="audio/mpeg"></audio>
+<button id="voiceButton">Включить музыку</button>
+<button id="downloadButton">Скачать видео</button> <!-- Добавленная кнопка -->
+<script>
+
+    // Ваш JavaScript код здесь
+
+    const video = document.getElementById('video');
+    const receivedImg = document.getElementById('receivedImg');
+    const repetitionsCountElement = document.getElementById('repetitionsCount');
+    const timerElement = document.getElementById('timer');
+    const audio = document.getElementById('audio');
+    // const recommendedRepetitionsElement = document.getElementById('recommendedRepetitions');
+    // const recommendedTimeElement = document.getElementById('recommendedTime');
+    const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws');
+    let seconds = 0;
+    let minutes = 0;
+
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const repetitions = urlParams.get('repetitions');
+    // const timer = urlParams.get('timer');
+
+    // Используем значения из URL как рекомендуемые значения
+    // const recommendedRepetitions = repetitions || '15'; // Если параметр не задан, устанавливаем значение по умолчанию 10
+    // const recommendedTime = timer || '0:30'; // Если параметр не задан, устанавливаем значение по умолчанию "0:30"
+
+    // Обновляем значения рекомендованного количества повторений и времени выполнения на странице
+    // recommendedRepetitionsElement.textContent = recommendedRepetitions;
+    // recommendedTimeElement.textContent = recommendedTime;
+
+    function updateTimer() {
+        seconds++;
+        if (seconds === 60) {
+            seconds = 0;
+            minutes++;
+        }
+        timerElement.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    // Получаем доступ к медиа устройству
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({video: true})
+            .then(function (stream) {
+                video.srcObject = stream;
+            })
+            .catch(function (err) {
+                console.log("Что-то пошло не так!", err);
+            });
+    }
+
+    ws.onmessage = function (event) {
+        const arrayBuffer = event.data;
+        const blob = new Blob([arrayBuffer], {type: "image/jpeg"});
+        receivedImg.src = URL.createObjectURL(blob);
+        repetitionsCountElement.innerText = event.data; // Обновляем значение на странице
+    };
+
+    video.addEventListener('play', () => {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        const fps = 10;
+        const interval = 1000 / fps;
+
+        const sendFrame = () => {
+            if (video.paused || video.ended) {
+                return;
+            }
+
+            const aspectRatio = video.videoWidth / video.videoHeight;
+            let targetHeight = 120;
+            let targetWidth = aspectRatio * targetHeight;
+
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+
+            context.drawImage(video, 0, 0, targetWidth, targetHeight);
+            canvas.toBlob(blob => {
+                blob.arrayBuffer().then(buffer => {
+                    const uint8View = new Uint8Array(buffer);
+                    ws.send(uint8View);
+                });
+            }, 'image/jpeg', 0.7);
+
+            setTimeout(sendFrame, interval);
+        };
+        sendFrame();
+
+        setInterval(updateTimer, 1000);
+    });
+
+    const voiceButtonClicked = () => {
+        if (audio.paused) {
+            audio.play();
+            voiceButton.innerText = 'Выключить музыку';
+        } else {
+            audio.pause();
+            voiceButton.innerText = 'Включить музыку';
+        }
+    }
+
+    const downloadVideo = async () => {
+        try {
+            const response = await fetch('/download_video');
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'video.mp4';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Ошибка при скачивании видео:', error);
+        }
+    }
+
+    document.getElementById('voiceButton').addEventListener('click', voiceButtonClicked);
+    document.getElementById('downloadButton').addEventListener('click', downloadVideo);
+</script>
+
+</body>
+</html>
